@@ -1,0 +1,135 @@
+﻿@model IEnumerable<ProductVM>
+
+@{ ViewData["Title"] = "Produse"; }
+
+<div class="row mb-2 mt-2 operationsButtons">
+    <div class="col-md-6">
+        <a href="/Product/New" class="btn btn-new btn-outline-new font-weight-bold mr-2" data-toggle="tooltip" title="New" data-placement="top">
+            <span class="fa fa-plus-circle"></span>
+        </a>
+
+        <button class="btn btn-outline-dark font-weight-bold mr-2" data-toggle="tooltip" title="Edit" data-placement="top" onclick="Product.onEditBtnPress()">
+            <span class="fa fa-edit"></span>
+        </button>
+
+        <button type="button" class="btn btn-delete btn-outline-delete font-weight-bold mr-2" id="btnDelete" data-toggle="tooltip" data-placement="top" title="Delete" onclick="Product.onDelete()">
+            <span class="fa fa-trash"></span>
+        </button>
+    </div>
+    <div class="col-md-6 d-flex align-items-center justify-content-end">
+        <span class="navbar-text">
+            Order by:
+        </span>&nbsp&nbsp;
+
+        <button type="button" class="btn btn-outline-secondary" onclick="sortTable_Price(3)">Price</button>&nbsp&nbsp;
+        <button type="button" class="btn btn-outline-secondary" onclick="sortTable_Name(2)">Name</button>
+    </div>
+</div>
+
+<br />
+<br />
+
+<table id="table" class="table table-hover table-striped table-dark">
+    <thead>
+        <tr>
+            <th hidden>Product Id</th>
+            <th>Imagine</th>
+            <th>Nume produs</th>
+            <th>Pret</th>
+            <th>Disponibilitate</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        @foreach (var item in Model)
+        {
+<tr id="@item.Id">
+    <td hidden>@item.Id</td>
+    <td><img style="width: 300px; height: 250px;" src="~/@item.ImagePath" alt="nu exista imagine momentan" /></td>
+    <td>@item.Name</td>
+    <td>@item.Price</td>
+    <td><input type="checkbox" checked="@item.IsAvailable" /></td>
+</tr>}
+
+    </tbody>
+
+</table>
+
+<script>
+    function sortTable_Name(n) {
+        var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+        table = document.getElementById("table");
+        switching = true;
+        dir = "asc";
+        while (switching) {
+            switching = false;
+            rows = table.rows;
+            for (i = 1; i < (rows.length - 1); i++) {
+                shouldSwitch = false;
+                x = rows[i].getElementsByTagName("TD")[n];
+                y = rows[i + 1].getElementsByTagName("TD")[n];
+                if (dir == "asc") {
+                    if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                } else if (dir == "desc") {
+                    if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+            }
+            if (shouldSwitch) {
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                switching = true;
+                switchcount++;
+            } else {
+                if (switchcount == 0 && dir == "asc") {
+                    dir = "desc";
+                    switching = true;
+                }
+            }
+        }
+    };
+
+
+
+    function sortTable_Price(n) {
+        var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+        table = document.getElementById("table");
+        switching = true;
+        dir = "asc";
+        while (switching) {
+            switching = false;
+            rows = table.rows;
+            for (i = 1; i < (rows.length - 1); i++) {
+                shouldSwitch = false;
+                x = rows[i].getElementsByTagName("TD")[n];
+                y = rows[i + 1].getElementsByTagName("TD")[n];
+                if (dir == "asc") {
+                    if (Number(x.innerHTML) > Number(y.innerHTML)) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                } else if (dir == "desc") {
+                    if (Number(x.innerHTML) < Number(y.innerHTML)) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+            }
+            if (shouldSwitch) {
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                switching = true;
+                switchcount++;
+            } else {
+                if (switchcount == 0 && dir == "asc") {
+                    dir = "desc";
+                    switching = true;
+                }
+            }
+        }
+    }
+</script>
