@@ -24,10 +24,19 @@
         <button type="button" class="btn btn-outline-secondary" onclick="sortTable_Price(3)">Price</button>&nbsp&nbsp;
         <button type="button" class="btn btn-outline-secondary" onclick="sortTable_Name(2)">Name</button>
     </div>
-</div>
+    </br>
 
-<br />
-<br />
+    <div class="col-md-12 mt-3">
+        <div class="input-group input-group-sm mb-3">
+            </br>
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroup-sizing-sm">Search</span>
+            </div>
+            <input type="text" id="searchInput" onkeyup="searchTable()" placeholder="Enter the name of a desired product"
+                   class="form-control" aria-label="Search" aria-describedby="inputGroup-sizing-sm">
+        </div>
+    </div>
+</div>
 
 <table id="table" class="table table-hover table-striped table-dark">
     <thead>
@@ -44,13 +53,14 @@
 
         @foreach (var item in Model)
         {
-<tr id="@item.Id">
-    <td hidden>@item.Id</td>
-    <td><img style="width: 300px; height: 250px;" src="~/@item.ImagePath" alt="nu exista imagine momentan" /></td>
-    <td>@item.Name</td>
-    <td>@item.Price</td>
-    <td><input type="checkbox" checked="@item.IsAvailable" /></td>
-</tr>}
+            <tr id="@item.Id">
+                <td hidden>@item.Id</td>
+                <td><img style="width: 300px; height: 250px;" src="~/@item.ImagePath" alt="nu exista imagine momentan" /></td>
+                <td>@item.Name</td>
+                <td>@item.Price</td>
+                <td><input type="checkbox" checked="@item.IsAvailable" /></td>
+            </tr>
+}
 
     </tbody>
 
@@ -128,6 +138,27 @@
                 if (switchcount == 0 && dir == "asc") {
                     dir = "desc";
                     switching = true;
+                }
+            }
+        }
+    };
+
+
+    function searchTable() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("searchInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("table");
+        tr = table.getElementsByTagName("tr");
+
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[2];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
                 }
             }
         }
